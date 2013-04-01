@@ -1,0 +1,36 @@
+:realt: { scheme: http,
+         hostName: realt.ua,
+         port: 0,
+         resourcePath: Db2/0Sd_Kv.php,
+         parameters: {  Cn_min: 100,
+                        Cn_max: 300,
+                        TmSdch: 9999,
+                        srtby: 5,
+                        showNum: 10000,
+                        vSps: 0,
+                        idNp: 100000,
+                        pos: 0,
+                        valt: 0 
+                      },
+         regexpr: !ruby/regexp '/(http.*)(vid=)(\w*)(\S*\b)/',
+         typePath: false
+        }
+
+:blagovist: {  scheme: http,
+              hostName: blagovist.ua,
+              port: 0,
+              resourcePath: realtysearch/rentflat.lisp,
+              parameters: {  p_RuType: 257,
+                             p_Region: 1,
+                             p_Price1: 1000,
+                             p_Price2: 5000,
+                             p_NFloors1: 1,
+                             p_NFloors2: 100,
+                             page: 9
+                           },
+              regexpr: !ruby/regexp '/hhhhhhh/',
+              typePath: false
+           }
+
+
+
