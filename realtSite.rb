@@ -31,38 +31,35 @@ end
 
 class HTMLrealt
 
+DBSites = YAML.load_file('dbSites.yaml')
+
 attr_reader :msg
 
 private 
   
-   def initialize(urlS, urlQ, valt, сn_min, сn_max, vSps)      
+   def initialize(site) 
+      print  DBSites, "\n\n"   
       @msg = ""
-      @urlSite = proc{ |showNum, pos| "#{urlS}#{urlQ}Cn_min=#{сn_min}&Cn_max=#{сn_max}&TmSdch=#{9999}&srtby=#{5}&showNum=#{showNum}&vSps=#{vSps}&idNp=#{100000}&pos=#{pos}&valt=#{valt}"}
+      @site = DBSites[site]
+      #print  site["parameters"].class, "\n\n"
+      siteP = ""
+      @site["parameters"].each_pair{|key, value| siteP = siteP + key.to_s + "=#{value}&"}
+      @urlSite = @site["scheme"] + "://" + @site["hostName"] + "/" + @site["resourcePath"] + "?" + siteP
+     
    end
    
-   def str_html(showNum, pos) 
-      uri = URI.parse @urlSite.call(showNum, pos)
-      uri.read #возвращает html страницу которая сохраняется в str      
+   def str_html 
+      uri = URI.parse @urlSite
+      uri.read      
    end
    
   
 public
 
-   def catchPage(*expr) 
+   def catchPage
        
-      showNum = 50; pos = 0
-
-      refs = expr[1].match str_html(showNum, pos)
-      countStr = refs[1].to_i     
-      
-      countPage = countStr/showNum
-	   
-      (countPage = 1) if countPage == 0
-	
-      countPage.times do |pos|
-         
-         str_html(showNum, pos+1).each_line do |str|
-            res = expr[0].match str
+         str_html.each_line do |str|
+            res = @site["regexpr"].match str
 
             if res
               then                  
@@ -73,17 +70,15 @@ public
                   end                  
             end
 
-         end#str_html       
-
-      end#countPage.times
+         end#str_html      
       (@msg = @msg + "Nothing") if @msg == ""      
    end
 
 end
 
-htm = HTMLrealt.new("http://realt.ua", "/Db2/0Sd_Kv.php?", 2, 0, 300, 0)
+htm = HTMLrealt.new(:realt)
 
-htm.catchPage(/(http.*)(vid=)(\w*)(\S*\b)/,  /cnt_all=([0-9]*)/)
-
-MaileRealt.welcom("denis.kondratenko@gmail.com", htm.msg).deliver
+htm.catchPage
+print htm.msg
+#MaileRealt.welcom("@gmail.com", htm.msg).deliver
 
