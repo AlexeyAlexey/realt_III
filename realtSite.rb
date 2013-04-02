@@ -11,15 +11,15 @@ Dir.chdir(File.dirname File.expand_path('../realtSite.rb', __FILE__))
 
 ActiveRecord::Base.establish_connection YAML.load_file('db.yaml')
   
-class RealtSecond < ActiveRecord::Base
+class RealtThird < ActiveRecord::Base
 end
 
 ActionMailer::Base.smtp_settings = YAML.load_file('mailer.yaml')
 
-class MaileRealt < ActionMailer::Base
+class MailRealt < ActionMailer::Base
  self.default :from => "ialexey.kondratenko@gmail.com", :charset => "Windows-1251"
  
- def welcom(recipient, msg)
+ def welcome(recipient, msg)
 
 	 mail(:to => recipient, :subject => "RealtReport 2 file on the https://github.com/AlexeyAlexey/realt_II sum in dollars between 0 and 300") do |format|	      
             format.text { render :text => msg}
@@ -27,6 +27,8 @@ class MaileRealt < ActionMailer::Base
  end
  
 end
+
+
 
 
 class HTMLrealt
@@ -37,15 +39,13 @@ attr_reader :msg
 
 private 
   
-   def initialize(site) 
-      print  DBSites, "\n\n"   
+   def initialize(site)         
       @msg = ""
-      @site = DBSites[site]
-      #print  site["parameters"].class, "\n\n"
+      @site = DBSites[site]      
       siteP = ""
       @site["parameters"].each_pair{|key, value| siteP = siteP + key.to_s + "=#{value}&"}
-      @urlSite = @site["scheme"] + "://" + @site["hostName"] + "/" + @site["resourcePath"] + "?" + siteP
-     
+      @headSite = @site["scheme"] + "://" + @site["hostName"] + "/" 
+      @urlSite = @headSite + @site["resourcePath"] + "?" + siteP
    end
    
    def str_html 
@@ -60,13 +60,17 @@ public
        
          str_html.each_line do |str|
             res = @site["regexpr"].match str
-
+            
             if res
               then                  
-                  if !RealtSecond.where(:value_id => res[3]).exists?
+                  if !RealtThird.where(:value_id => res[2], :host_name => @site["hostName"]).exists?
                     then 
-                        RealtSecond.create(:reference => res[0], :value_id => res[3])                        
-                        @msg = @msg + " - " + res[0].clone + "\n"                                      
+                        source = @headSite + @site["resourcePath2"] + "?" + @site["id"] + "=#{res[2]}"
+                        RealtThird.create(:reference => source, 
+                                          :value_id => res[2],
+                                          :valute => "dolars",
+                                          :host_name => @site["hostName"])                        
+                        @msg = @msg + " - " + source + "\n"                                      
                   end                  
             end
 
@@ -80,5 +84,5 @@ htm = HTMLrealt.new(:realt)
 
 htm.catchPage
 print htm.msg
-#MaileRealt.welcom("@gmail.com", htm.msg).deliver
+#MailRealt.welcome("@gmail.com", htm.msg).deliver
 
