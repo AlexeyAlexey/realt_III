@@ -29,8 +29,6 @@ class MailRealt < ActionMailer::Base
 end
 
 
-
-
 class HTMLrealt
 
 DBSites = YAML.load_file('dbSites.yaml')
