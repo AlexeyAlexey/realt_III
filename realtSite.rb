@@ -28,9 +28,6 @@ class MailRealt < ActionMailer::Base
  
 end
 
-
-
-
 class HTMLrealt
 
 DBSites = YAML.load_file('dbSites.yaml')
@@ -80,7 +77,7 @@ public
 
 end
 
-htm = HTMLrealt.new(:realt)
+htm = HTMLrealt.new(:blagovist)
 
 htm.catchPage
 print htm.msg
