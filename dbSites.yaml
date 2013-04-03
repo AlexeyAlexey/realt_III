@@ -45,4 +45,27 @@
            }
 
 
+:fn:       { scheme: http,
+              hostName: fn.ua,
+              port: 0,
+              resourcePath: listing.php,
+              resourcePath2: view.php, 
+              parameters: {  "parent_id[0]": 1,
+                             "parent_id[1]": 9,
+                             "parent_id[2]": 1,
+                             "parent_id[3]": all,
+                              pricemin: 100,
+                              pricemax: 500,
+                              pricecur: 2,
+                              rooms: 0                             
+                           },
+              regexpr: !ruby/regexp '/(ad_id=)(\d*)/',
+              id: ad_id,
+              typePath: false,
+              variable: { priceMin: pricemin, priceMax:  pricemax, valute: pricecur},
+
+              valute: { 3: dolars, 2: euro, 1: hryvnia}
+           }
+
+
 

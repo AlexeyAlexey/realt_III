@@ -9,6 +9,8 @@ require 'yaml'
 
 Dir.chdir(File.dirname File.expand_path('../realtSite.rb', __FILE__))
 
+require './treeHash.rb'
+
 ActiveRecord::Base.establish_connection YAML.load_file('db.yaml')
   
 class RealtThird < ActiveRecord::Base
@@ -35,16 +37,7 @@ DBSites = YAML.load_file('dbSites.yaml')
 attr_reader :msg
 
 private 
-  
-   def initialize(site)         
-      @msg = ""
-      @site = DBSites[site]      
-      siteP = ""
-      @site["parameters"].each_pair{|key, value| siteP = siteP + key.to_s + "=#{value}&"}
-      @headSite = @site["scheme"] + "://" + @site["hostName"] + "/" 
-      @urlSite = @headSite + @site["resourcePath"] + "?" + siteP
-   end
-   
+    
    def str_html 
       uri = URI.parse @urlSite
       uri.read      
@@ -52,6 +45,19 @@ private
    
   
 public
+
+   def setProperty(site)
+      @msg = ""
+      @site = DBSites[site]
+#print @site["variable"]
+      pr = @site["variable"].treeHash @site["parameters"], @site["valute"]
+      @msg = "Site: #{site}\n priceMin: #{pr["priceMin"]}, priceMax:  #{pr["priceMax"]}, valute: #{pr["valute"]} \n"
+      siteP = ""
+      @site["parameters"].each_pair{|key, value| siteP = siteP + key.to_s + "=#{value}&"}
+      @headSite = @site["scheme"] + "://" + @site["hostName"] + "/" 
+      @urlSite = @headSite + @site["resourcePath"] + "?" + siteP
+      print @urlSite, "\n"
+   end
 
    def catchPage
        
@@ -77,9 +83,15 @@ public
 
 end
 
-htm = HTMLrealt.new(:blagovist)
 
-htm.catchPage
-print htm.msg
+htm = HTMLrealt.new
+
+message = ""
+[:realt, :blagovist, :fn].each do |el|
+   htm.setProperty el
+   htm.catchPage
+   message = message + htm.msg + "\n"   
+end
+print message
 #MailRealt.welcome("@gmail.com", htm.msg).deliver
 

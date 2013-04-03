@@ -1,0 +1,14 @@
+:realt: { scheme: http,
+          hostName: realt.ua,
+          port: 0,
+          hashValue: { priceMin: 100,
+                       priceMax: 500,
+                       valute: 2
+          },
+          resourcePath: "Db2/0Sd_Kv.php?Cn_min=#{priceMin}&Cn_max=#{priceMax}&TmSdch=9999&srtby=5&showNum=10000&vSps=0&idNp=100000&pos=0&valt=#{valute}",
+          resourcePath2: "Db2/?vid=#{id_res}",
+          regexpr: !ruby/regexp '/(vid=)(\w*)(\S*\b)/',
+          typValute: { 2: dolars, 4: euro, 1: hryvnia}
+
+}
+
