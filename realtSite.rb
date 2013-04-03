@@ -6,6 +6,7 @@ require 'fileutils'
 require 'active_record'
 require 'action_mailer'
 require 'yaml'
+require 'erb'
 
 Dir.chdir(File.dirname File.expand_path('../realtSite.rb', __FILE__))
 
@@ -32,7 +33,7 @@ end
 
 class HTMLrealt
 
-DBSites = YAML.load_file('dbSites.yaml')
+DBSites = YAML.load_file('dbSitesII.yaml')
 
 attr_reader :msg
 
@@ -47,16 +48,16 @@ private
 public
 
    def setProperty(site)
-      @msg = ""
+      
       @site = DBSites[site]
-#print @site["variable"]
-      pr = @site["variable"].treeHash @site["parameters"], @site["valute"]
-      @msg = "Site: #{site}\n priceMin: #{pr["priceMin"]}, priceMax:  #{pr["priceMax"]}, valute: #{pr["valute"]} \n"
-      siteP = ""
-      @site["parameters"].each_pair{|key, value| siteP = siteP + key.to_s + "=#{value}&"}
       @headSite = @site["scheme"] + "://" + @site["hostName"] + "/" 
-      @urlSite = @headSite + @site["resourcePath"] + "?" + siteP
-      print @urlSite, "\n"
+
+      hashValue = @site["hashValue"]  
+      @head = hashValue.treeHash @site["typValute"]
+      @msg = "Site: #{@site["hostName"]}   priceMin: #{@head["priceMin"]}   priceMax: #{@head["priceMax"]}   valute: #{@head["valute"]} \n" 
+      path = ERB.new(@site["resourcePath"])      
+      @urlSite = @headSite + path.result(binding)
+      
    end
 
    def catchPage
@@ -68,11 +69,14 @@ public
               then                  
                   if !RealtThird.where(:value_id => res[2], :host_name => @site["hostName"]).exists?
                     then 
-                        source = @headSite + @site["resourcePath2"] + "?" + @site["id"] + "=#{res[2]}"
+                        id_res = res[2]
+                        source = @headSite + (ERB.new(@site["resourcePath2"])).result(binding)
                         RealtThird.create(:reference => source, 
-                                          :value_id => res[2],
-                                          :valute => "dolars",
-                                          :host_name => @site["hostName"])                        
+                                          :value_id  => res[2],
+                                          :valute    => @head["valute"],
+                                          :host_name => @site["hostName"],
+                                          :priceMin  => @head["priceMin"],
+                                          :priceMax  => @head["priceMax"])                        
                         @msg = @msg + " - " + source + "\n"                                      
                   end                  
             end
@@ -87,7 +91,7 @@ end
 htm = HTMLrealt.new
 
 message = ""
-[:realt, :blagovist, :fn].each do |el|
+[:realdruzi].each do |el|
    htm.setProperty el
    htm.catchPage
    message = message + htm.msg + "\n"   
