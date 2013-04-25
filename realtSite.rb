@@ -10,14 +10,14 @@ require 'erb'
 
 Dir.chdir(File.dirname File.expand_path('../realtSite.rb', __FILE__))
 
-require './treeHash.rb'
+require './treeHashII.rb'
 
-ActiveRecord::Base.establish_connection YAML.load_file('db.yaml')
+ActiveRecord::Base.establish_connection YAML.load_file('db.yml')
   
 class RealtThird < ActiveRecord::Base
 end
 
-ActionMailer::Base.smtp_settings = YAML.load_file('mailer.yaml')
+ActionMailer::Base.smtp_settings = YAML.load_file('mailer.yml')
 
 class MailRealt < ActionMailer::Base
  self.default :from => "ialexey.kondratenko@gmail.com", :charset => "Windows-1251"
@@ -33,7 +33,7 @@ end
 
 class HTMLrealt
 
-DBSites = YAML.load_file('dbSitesII.yaml')
+DBSites = YAML.load_file('dbSitesII.yml')
 
 attr_reader :msg
 
@@ -91,11 +91,11 @@ end
 htm = HTMLrealt.new
 
 message = ""
-[:realdruzi].each do |el|
+[:realt, :realdruzi].each do |el|
    htm.setProperty el
    htm.catchPage
    message = message + htm.msg + "\n"   
 end
-print message
-#MailRealt.welcome("@gmail.com", htm.msg).deliver
+
+MailRealt.welcome("alexey.kondratenko@mail.ru", message).deliver
 
