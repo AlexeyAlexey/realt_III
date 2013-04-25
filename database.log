@@ -8,3 +8,9 @@ D, [2013-04-25T12:41:33.483649 #4133] DEBUG -- :   [1m[36m (143.0ms)[0m  [1m
 I, [2013-04-25T12:41:33.483923 #4133]  INFO -- : Migrating to CreateRealtThirds (1)
 D, [2013-04-25T12:41:33.670131 #4133] DEBUG -- :   [1m[35m (177.1ms)[0m  CREATE TABLE `realt_thirds` (`idrealt_third` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `reference` varchar(255) NOT NULL, `value_id` varchar(255) NOT NULL, `valute` varchar(255) NOT NULL, `host_name` varchar(255) NOT NULL, `priceMin` int(11) NOT NULL, `priceMax` int(11) NOT NULL) ENGINE=InnoDB
 D, [2013-04-25T12:41:33.824157 #4133] DEBUG -- :   [1m[36m (152.7ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('1')[0m
+D, [2013-04-25T16:17:17.159391 #6105] DEBUG -- :   [1m[36m (228.1ms)[0m  [1mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+D, [2013-04-25T16:17:17.523490 #6105] DEBUG -- :   [1m[35m (232.2ms)[0m  CREATE UNIQUE INDEX `unique_schema_migrations` ON `schema_migrations` (`version`)
+D, [2013-04-25T16:17:18.240171 #6105] DEBUG -- :   [1m[36m (187.1ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations` [0m
+I, [2013-04-25T16:17:18.240438 #6105]  INFO -- : Migrating to CreateRealtThirds (1)
+D, [2013-04-25T16:17:18.409637 #6105] DEBUG -- :   [1m[35m (144.1ms)[0m  CREATE TABLE `realt_thirds` (`idrealt_third` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `reference` varchar(255) NOT NULL, `value_id` varchar(255) NOT NULL, `valute` varchar(255) NOT NULL, `host_name` varchar(255) NOT NULL, `priceMin` int(11) NOT NULL, `priceMax` int(11) NOT NULL) ENGINE=InnoDB
+D, [2013-04-25T16:17:18.565071 #6105] DEBUG -- :   [1m[36m (154.1ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('1')[0m
