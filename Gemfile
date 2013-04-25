@@ -7,6 +7,5 @@ gem "open-uri-cached", "~> 0.0.5"
 gem 'fileutils'
 gem 'activerecord'
 gem 'actionmailer'
-gem 'yaml'
 gem 'logger'
 gem 'fileutils'
