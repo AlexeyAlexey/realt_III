@@ -1,0 +1,31 @@
+:realt: { scheme: http,
+          hostName: realt.ua,
+          port: 0,
+          hashValue: { priceMin: 100,
+                       priceMax: 500,
+                       valute: 2
+          },
+          resourcePath: "Db2/0Sd_Kv.php?Cn_min=<%= hashValue[\"priceMin\"] %>&Cn_max=<%= hashValue[\"priceMax\"] %>&TmSdch=9999&srtby=5&showNum=10000&vSps=0&idNp=100000&pos=0&valt=<%= hashValue[\"valute\"] %>",
+          resourcePath2: "Db2/?vid=<%= id_res %>",
+          regexpr: !ruby/regexp '/(vid=)(\w*)(\S*\b)/',
+          typValute: { 2: dolars, 4: euro, 1: hryvnia}
+
+}
+
+
+
+:realdruzi: { scheme: http,
+              hostName: realdruzi.com.ua,
+              port: 0,
+              hashValue: { priceMin: 0,
+                           priceMax: 4000,
+                           listCount: 50,
+                           valute: valt
+            },
+          resourcePath: "lookforapp/ivn_mod_type/search_form/ivn_mod_name/rent_flat/sale/1/estate_type/%D0%9A%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80%D0%B0/subway//price_from/<%= hashValue[\"priceMin\"] %>/price_to/<%= hashValue[\"priceMax\"] %>/room_quantity_from/a-n-y/room_quantity_to/a-n-y/district/a-n-y/city_block/a-n-y/?list_count=<%= hashValue[\"listCount\"] %>",
+
+          resourcePath2: "app/<%= id_res %>",
+          regexpr: !ruby/regexp '/(/app/)(\d*)/',
+          typValute: { valt: hryvnia}
+
+}
