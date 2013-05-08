@@ -7,4 +7,4 @@ hash2 = {:one => 1, :ten => 10}
 
 hash1.treeHash hash2 #=> {:value1 => 1, value2 => :two}
 
-
+This app was deployed to Heroku
